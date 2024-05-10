@@ -1,0 +1,11 @@
+{
+  "name": "simple-ams",
+  "version": "1.0.0",
+  "description": "simple attendance web app",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "author": "didiprayoyo",
+  "license": "ISC"
+}

@@ -1,0 +1,25 @@
+
+packages to be installed:
+    eslint, prettier
+    migration: typescript
+    in reactjs env:
+        react, react-dom
+        react-router-dom
+        hooks: useState, useEffect, useRefs/createRefs, useMemo
+        cdn (save-dev): bootstrap/semantic ui, faker, jsonplaceholder
+        axios (communicate with be)
+        redux, react-redux, useContext
+        @reduxjs/toolkit, @redux-devtools/extension, redux-thunk
+        lodash (frontend), formik + yup
+        styled-components
+        redux form, react final form
+    in nodejs env:
+        body-parser
+        dotenv
+        express
+        morgan
+        nodemon (save-dev)
+        pg, prisma/sequelize
+        validator (for backend)
+        jwt
+        jest

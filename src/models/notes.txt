@@ -1,0 +1,3 @@
+db server using postgres
+
+TO DO: using sequelize/prisma as ORM t

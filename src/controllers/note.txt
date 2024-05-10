@@ -1,0 +1,6 @@
+all handler functions and middlewares for each routing
+
+references from webdevsimplified templates
+middlewares:
+    + userAuth
+    + roleAuth
