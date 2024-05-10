@@ -11,7 +11,7 @@ const signupUser = async (req, res) => {
         // TO DO: synchronize user model, use body in axios
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         id += 1;
-        const user = { id, name: req.body.name, password: hashedPassword };
+        const user = { id, name: req.body.name, password: hashedPassword, role: "user" };
 
         registerUser(user);
         res.status(201).json({ message: "Success register the user"}); // go to login page
@@ -76,19 +76,42 @@ const authenticateToken = (req, res, next) => {
     })
 }
 
+// Add authorization
+const authUser = (req, res, next) => {
+    if (req.user == null) {
+        res.status(403)
+        return res.send('You need to sign in')
+    }
+    next()
+}
+
+const authRole = (role) => {
+    return (req, res, next) => {
+        if (req.user.role !== role) {
+            res.status(401)
+            return res.send('Not allowed')
+        }
+        next()
+    }
+}
+
 // Using Passport: handle this in frontend react-router
-checkAuthenticated = (req, res, next) => {
+const checkAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next();
     }
     res.json({ message: "Not authenticated", render: "Go to login page" });
 }
   
-checkNotAuthenticated = (req, res, next) => {
+const checkNotAuthenticated = (req, res, next) => {
     if (req.isAuthenticated()) {
         return res.json({ message: "Already authenticated", render: "Go to home page" });
     }
     next()
 }
 
-export { signupUser, loginUser, logoutUser, checkAuthenticated, checkNotAuthenticated, authenticateToken, postToken, };
+export { signupUser, loginUser, logoutUser,
+    checkAuthenticated, checkNotAuthenticated,
+    authenticateToken, postToken, 
+    authUser, authRole,
+};
