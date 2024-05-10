@@ -1,6 +1,7 @@
 import * as path from "path";
 import { authRouter } from "./routes/AuthRouter.js";
 import { userRouter } from "./routes/UserRouter.js"; // to access resolve & join specific path needed
+const projectRouter = require('./routes/ProjectRouter.js');
 
 const express = require('express');
 const morgan = require('morgan');
@@ -21,6 +22,7 @@ app.use(morgan('dev'));
 
 // URL handling
 app.use("/users", userRouter);
+app.use('/projects', projectRouter)
 // TO DO: absen, admin-view, extended dll
 // optional: profile
 
