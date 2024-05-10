@@ -1,53 +1,34 @@
+import * as path from "path";
+import { userRouter } from "./routes/UserRouter.js"; // to access resolve & join specific path needed
+
 const express = require('express');
-const expressLayout = require('express-ejs-layouts');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 
-// use postgres db
 const { pool } = require('./postgres-db.js');
-
 const app = express();
 
-const { 
-    checkInput, addContact, updateContact, deleteContact,
-} = require('./handler.js');
-
-const {
-    appName, author, dirPath, dataPath
-} = require('./constVar.js');
-
-let invalidMessages = [];
-
-// load environment variables from .env file
 dotenv.config();
 // to jsonify query (on db) response, by res.json(<query-result>)
 app.use(express.json());    // req.body
 
 app.use(express.static('public'));
-app.use(morgan('dev')); // check & debug logging in development
-
-app.set('view engine', 'ejs');
-app.use(expressLayout);
-app.set('layout', 'layouts/layout');
-
+app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended : true }));
 
-app.get('/', (req, res) => {
-    res.status(200);
-    res.render('index', {
-        title: `Homepage - ${appName}`,
-        author,
+// URL handling
+app.use("/user", userRouter);
+// TO DO: absen, admin-view, extended dll
+// optional: profile
 
-    });
+app.get('/', (req, res) => {
+    return res.status(200).json({ message: "This is homepage" });
 });
 
 // Page not found: 404
 app.use('/', (req, res) => {
-    res.status(404);
-    res.render('not-found', {
-        title: `Page Not Found`,
-    })
+    return res.status(404).json({ message: "Page Not Found" })
 });
 
 const port = process.env.PORT || 3000;
