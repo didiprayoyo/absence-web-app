@@ -5,7 +5,7 @@ import {
     getAllUsers, getUser,
 } from "../controllers/UserHandler.js";
 
-router.get("/allUsers", getAllUsers);
-router.get("/user/:id", getUser);
+userRouter.get("/allUsers", getAllUsers);
+userRouter.get("/user/:id", getUser);
 
 export { userRouter };

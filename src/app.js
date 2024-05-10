@@ -1,4 +1,5 @@
 import * as path from "path";
+import { authRouter } from "./routes/AuthRouter.js";
 import { userRouter } from "./routes/UserRouter.js"; // to access resolve & join specific path needed
 
 const express = require('express');
@@ -6,19 +7,20 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 
-const { pool } = require('./postgres-db.js');
+// initialize server for (routing) controller
 const app = express();
 
+// setup config
 dotenv.config();
 // to jsonify query (on db) response, by res.json(<query-result>)
 app.use(express.json());    // req.body
-
+// app.use(express.urlencoded({ extended : true }));
+app.use(bodyParser.urlencoded({ extended : true })); // use body-parser instead
 app.use(express.static('public'));
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended : true }));
 
 // URL handling
-app.use("/user", userRouter);
+app.use("/users", userRouter);
 // TO DO: absen, admin-view, extended dll
 // optional: profile
 
@@ -130,3 +132,53 @@ app.listen(port, () => {
 //     res.redirect('/contact');
 // });
 
+// Using passport, TO DO: import all packages based on wds
+const passport = require('passport')
+const flash = require('express-flash')
+const session = require('express-session')
+const methodOverride = require('method-override')
+
+const LocalStrategy = require('passport-local').Strategy
+const bcrypt = require('bcrypt')
+
+function initialize(passport, getUserByEmail, getUserById) {
+  const authenticateUser = async (email, password, done) => {
+    const user = getUserByEmail(email)
+    if (user == null) {
+      return done(null, false, { message: 'No user with that email' })
+    }
+
+    try {
+      if (await bcrypt.compare(password, user.password)) {
+        return done(null, user)
+      } else {
+        return done(null, false, { message: 'Password incorrect' })
+      }
+    } catch (e) {
+      return done(e)
+    }
+  }
+
+  passport.use(new LocalStrategy({ usernameField: 'email' }, authenticateUser))
+  passport.serializeUser((user, done) => done(null, user.id))
+  passport.deserializeUser((id, done) => {
+    return done(null, getUserById(id))
+  })
+}
+initializePassport(
+  passport,
+  email => users.find(user => user.email === email),
+  id => users.find(user => user.id === id)
+)
+
+const users = []
+
+app.use(flash())
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(methodOverride('_method'))

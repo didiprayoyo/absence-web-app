@@ -2,6 +2,7 @@
 packages to be installed:
     eslint, prettier
     migration: typescript
+    wds: express-flash, express-session, method-override, passport, passport-local
     in reactjs env:
         react, react-dom
         react-router-dom
@@ -21,5 +22,5 @@ packages to be installed:
         nodemon (save-dev)
         pg, prisma/sequelize
         validator (for backend)
-        jwt
+        jwt, bcrypt
         jest
