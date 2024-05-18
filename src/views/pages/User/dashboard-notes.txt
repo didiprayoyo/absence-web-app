@@ -1,0 +1,1 @@
+get user detail by get by id

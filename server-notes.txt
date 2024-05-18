@@ -13,7 +13,7 @@ TO DO:
     build by query attendance table by joining on user id
     build attendace infos (admin only) & detail infos per user
 
-    migrate db to postgres & model the ORMs
+    model the ORMs
 
     ideas for extended features after finish all above TO-DOS
     30 extended TODOs
@@ -21,11 +21,15 @@ TO DO:
 SO, 50 TARGETS IN 25 HOURS, 2 FEATURES PER HOUR
 
 endpoints summary:
-    GET /users
-    GET /user/:userId
-    PUT /user/:userId
-    GET /user-logs
-    GET /user-log/:userId
+    GET user/allUsers
+    GET user/:userId
+    PUT user/:userId
+attendance endpoints:
+    GET attendance/logs
+    GET attendance/log/:userId
+app log endpoints:
+    GET log/user-logs
+    GET log/user-log/:userId
 
 packages to be installed:
     eslint, prettier
@@ -43,6 +47,7 @@ packages to be installed:
         styled-components
         redux form, react final form
     in nodejs env:
+        cors, cookie-parser
         body-parser
         dotenv
         express

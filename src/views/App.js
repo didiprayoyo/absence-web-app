@@ -6,13 +6,13 @@ const App = () => {
         <>
             <Router>
                 <Routes element={<AuthLayout />}>
-                    <Route elemet={<Login />} />
-                    <Route elemet={<Signup />} />
+                    <Route element={<Login />} />
+                    <Route element={<Signup />} />
                 </Routes>
                 
                 <Routes element={<HomeLayout />}>
-                    <Route elemet={<Dashboard />} />
-                    <Route elemet={<Attendance />} />
+                    <Route element={<Dashboard />} />
+                    <Route element={<Attendance />} />
                 </Routes>
             </Router>
         </>

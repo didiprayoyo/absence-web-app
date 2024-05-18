@@ -1,3 +1,7 @@
+/** Extended TODO:
+ * projects querying and some middleware here
+ */
+
 const { ROLE, projects } = require('../models/UserData');
 
 function canViewProject(user, project) {

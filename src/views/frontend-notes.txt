@@ -1,0 +1,4 @@
+TODO: create vite react js
+
+frontend ui using react js & ...
+    semantic ui as ui framework

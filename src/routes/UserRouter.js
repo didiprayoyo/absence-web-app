@@ -1,23 +1,19 @@
-import express from "express";
+const express = require("express");
+const { ROLE } = require("../models/UserData.js");
+const { getAllUsers, getUser, registerUser, editUser, deleteUser, getUserSummary } = require("../controllers/UserHandler.js");
+// import middleware
+const { authUser, authRole } = require("../controllers/AuthHandler.js");
+
 const userRouter = express.Router(); // router object
 
-import {
-    getAllUsers, getUser,
-} from "../controllers/UserHandler.js";
+// [ ]: Test API only
+// ROLE[1] is admin, ROLE[2] is super admin
+userRouter.get("/all-users", authUser, authRole([ROLE[1], ROLE[2]]), getAllUsers);
+userRouter.get("/:id", authUser, authId([ROLE[1], ROLE[2]]), getUser);
+userRouter.post("", authUser, authRole([ROLE[1], ROLE[2]]), registerUser);
+userRouter.put("/:id", authUser, authId([ROLE[1], ROLE[2]]), editUser);
+userRouter.delete("/:id", authUser, authId([ROLE[1], ROLE[2]]), deleteUser);
 
-userRouter.get("/allUsers", getAllUsers);
-userRouter.get("/user/:id", getUser);
+userRouter.get("/admin-dashboard", authUser, authId([ROLE[1], ROLE[2]]), getUserSummary);
 
-userRouter.get('/', (req, res) => {
-    res.send('Home Page')
-})
-
-userRouter.get('/dashboard', authUser, (req, res) => {
-    res.send('Dashboard Page')
-})
-
-userRouter.get('/admin', authUser, authRole(ROLE.ADMIN), (req, res) => {
-    res.send('Admin Page')
-})
-
-export { userRouter };
+module.exports = { userRouter };

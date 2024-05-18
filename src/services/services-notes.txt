@@ -1,4 +1,5 @@
 
 
 extended TODO:
+    + filtering query, use LIKE <regex>: *
     + create ORM, by adding layers (3 layers: services -> orm -> db), query db to ORM first

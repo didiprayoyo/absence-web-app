@@ -4,3 +4,5 @@ references from webdevsimplified templates
 middlewares:
     + userAuth
     + roleAuth
+
+handle try catch for query error only in Services

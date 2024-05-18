@@ -1,4 +1,0 @@
-TO DO: create vite react js
-
-frontent ui using reactjs & ...
-    semantic ui as ui framework
