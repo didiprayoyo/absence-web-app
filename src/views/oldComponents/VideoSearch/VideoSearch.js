@@ -6,7 +6,7 @@ import './Video.css'
 
 import { generateRandomComments, RandomComments } from './RandomComments';
 
-// to dotenv???
+// to dotenv??? youtube api key
 const API_KEY = "AIzaSyD5OzX0gNSKszwwTfHe4Q6PX3aXOd5_Y8Q";
 
 const SelectedVideo = (props) => {
@@ -34,12 +34,10 @@ const VideoCard = (props) => {
     return (
         <div key={video.id.videoId} className="video-card" style={{ margin: '10px' }}>
             <form onClick={() => props.onClick(video.id.videoId, video.snippet)}>
-                {/* <img src={video} alt={video.alt_description} /> */}
                 <img
                     src={video.snippet.thumbnails.default.url}
                     alt="gtw malezzz"
-                    // src={`https://www.youtube.com/embed/${video.id.videoId}`}
-                    // allowFullScreen
+                    allowFullScreen
                 />
                 <div className='video-card-title'>
                     <h2>{video.snippet.title}</h2>
@@ -51,7 +49,7 @@ const VideoCard = (props) => {
     );
 }
 
-const RecomendedVideos = (props) => {
+const RecommendedVideos = (props) => {
     return (
         <div>
             {props.videos.map((video) => (
@@ -61,7 +59,7 @@ const RecomendedVideos = (props) => {
     );
 }
 
-const VideoSearch = (props) => {
+const VideoSearch = () => {
     const [selectedVideoId, setSelectedVideoId] = useState("");
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [videos, setVideos] = useState([]); // videos by search result
@@ -72,7 +70,6 @@ const VideoSearch = (props) => {
         const response = await axios.get(apiUrl, {
             params: { q: term, key: API_KEY, },
         });
-        // const response = await axios.get(apiUrl);
         const videoData = response.data.items;
 
         setVideos(videoData);
@@ -91,11 +88,9 @@ const VideoSearch = (props) => {
                     <SearchBar onSubmit={onSearchSubmit} name="Video" />
 
                 <div className='content-container'>
-                    {/* selectedVideo Component */}
                     <SelectedVideo className="selected-video" selectedVideo={selectedVideo} selectedVideoId={selectedVideoId} comments={comments} />
-                    {/* { !selectedVideo && (<SelectedVideo selectedVideo={selectedVideo} selectedVideoId={selectedVideoId} />)} */}
 
-                    <RecomendedVideos className="recommended-video" videos={videos} onClick={onVideoCardClick} />
+                    <RecommendedVideos className="recommended-video" videos={videos} onClick={onVideoCardClick} />
                 </div>
             </div>
     );

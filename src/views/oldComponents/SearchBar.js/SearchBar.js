@@ -1,6 +1,5 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 
-// refactor SearchBar to functional component
 const SearchBar = (props) => {
     const [term, setTerm] = useState("");
 

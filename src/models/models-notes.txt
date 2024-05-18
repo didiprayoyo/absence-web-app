@@ -1,0 +1,7 @@
+
+
+Extended TODO:
+    [x] db server using postgres
+    + using sequelize/prisma as ORM in services
+    [x] primary key ID pakai int aja & auto-increment
+        + if any enlarging scale condition, migrate to UUID (or string)

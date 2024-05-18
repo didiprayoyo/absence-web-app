@@ -1,4 +1,4 @@
-const { ROLE, projects } = require('./UserData');
+const { ROLE, projects } = require('../models/UserData');
 
 function canViewProject(user, project) {
   return (

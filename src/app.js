@@ -35,7 +35,7 @@ app.use('/', (req, res) => {
     return res.status(404).json({ message: "Page Not Found" })
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.NODEJS_PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });

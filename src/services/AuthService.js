@@ -1,8 +1,8 @@
-import { USER_DATA } from "./UserData.js";
+import { USER_DATA } from "../models/UserData.js";
 
-// TO DO: for all handler, handle using try-catch for any query results
+// TODO: for all handler, handle using try-catch for any query results
 const registerUser = (newUser) => {
-    return USER_DATA.push(newUser); // TO DO: DON'T FORGET TO INSERT TO DB (OR JUST SYNCHRONIZE ORM TO DB WHENEVER TRIGGER TAKEN)
+    return USER_DATA.push(newUser); // TODO: DON'T FORGET TO INSERT TO DB (OR JUST SYNCHRONIZE ORM TO DB WHENEVER TRIGGER TAKEN)
 };
 
 const queryUserByName = (name) => {

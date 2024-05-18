@@ -17,7 +17,7 @@ const App = () => {
             </Router>
         </>
     )
-}
+};
 
 // const App = () => {
 //     const contacts = [];

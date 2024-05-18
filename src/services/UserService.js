@@ -1,4 +1,4 @@
-import { USER_DATA } from "./UserData.js";
+import { USER_DATA } from "../models/UserData.js";
 
 // TO DO: for all handler, handle using try-catch for any query results
 const queryListOfUsers = () => {

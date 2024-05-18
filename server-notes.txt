@@ -1,0 +1,54 @@
+TO DO:
+    create frontend server
+    develop simple SPA for authentication & authorization
+    testing frontend
+    communicate frontend - backend using axios
+    testing backend + debugging
+
+    build CRUD for biodata & picture for all user roles + opsional: log edit biodata & picture (+ table for biodata log)
+    build superadmin feature & CRUD all users (employees) + employees CRUD log (admin only)
+    
+    build attendance page, flow the datetime, and button to in/out office
+    add table for attendance log
+    build by query attendance table by joining on user id
+    build attendace infos (admin only) & detail infos per user
+
+    migrate db to postgres & model the ORMs
+
+    ideas for extended features after finish all above TO-DOS
+    30 extended TODOs
+
+SO, 50 TARGETS IN 25 HOURS, 2 FEATURES PER HOUR
+
+endpoints summary:
+    GET /users
+    GET /user/:userId
+    PUT /user/:userId
+    GET /user-logs
+    GET /user-log/:userId
+
+packages to be installed:
+    eslint, prettier
+    migration: typescript
+    wds: express-flash, express-session, method-override, passport, passport-local
+    in reactjs env:
+        react, react-dom
+        react-router-dom
+        hooks: useState, useEffect, useRefs/createRefs, useMemo
+        cdn (save-dev): bootstrap/semantic ui, faker, jsonplaceholder
+        axios (communicate with be)
+        redux, react-redux, useContext
+        @reduxjs/toolkit, @redux-devtools/extension, redux-thunk
+        lodash (frontend), formik + yup
+        styled-components
+        redux form, react final form
+    in nodejs env:
+        body-parser
+        dotenv
+        express
+        morgan
+        nodemon (save-dev)
+        pg, prisma/sequelize
+        validator (for backend)
+        jwt, bcrypt
+        jest

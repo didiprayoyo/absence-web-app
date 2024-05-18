@@ -1,3 +1,0 @@
-TO DO: create ORM
-
-by adding layers, query db to ORM first

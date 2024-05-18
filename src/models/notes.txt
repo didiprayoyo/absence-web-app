@@ -1,5 +1,0 @@
-db server using postgres
-primary key ID pakai int aja
-if any enlarging scale condition, migrate to UUID (or string)
-
-TO DO: using sequelize/prisma as ORM in services
