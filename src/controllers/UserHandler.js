@@ -3,12 +3,15 @@ const multer = require("multer");
 const path = require("path");
 const {
   queryListOfUsers,
+  queryListOfUsersByRole,
+  queryListOfEmployee,
   queryUserById,
   createUser,
   updateUser,
   deleteUserById,
   readSummaryInfos,
 } = require("../services/UserService.js");
+const { ROLE } = require("../models/UserData.js");
 
 const getAllUsers = (req, res) => {
   const userList = queryListOfUsers();
@@ -16,6 +19,18 @@ const getAllUsers = (req, res) => {
   // check log response to react axios
   return res.json(userList);
 };
+
+const getAllAdmins = (req, res) => {
+  const adminList = queryListOfUsersByRole(ROLE[1]);
+
+  return res.json(adminList);
+}
+
+const getAllEmployees = (req, res) => {
+  const employeeList = queryListOfEmployee();
+
+  return res.json(employeeList);
+}
 
 const getUser = (req, res) => {
   const userId = req.params.id; // passing param from axios.get
@@ -96,4 +111,4 @@ const getUserSummary = (req, res) => {
   return res.json(summary);
 }
 
-module.exports = { getAllUsers, getUser, registerUser, editUser, deleteUser, getUserSummary };
+module.exports = { getAllUsers, getAllAdmins, getAllEmployees, getUser, registerUser, editUser, deleteUser, getUserSummary };

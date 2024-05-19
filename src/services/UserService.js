@@ -1,5 +1,6 @@
 const { pool } = require("../models/postgres-db");
 const { ROLE } = require("../models/UserData");
+const { countDepartment } = require("./DepartmentService");
 /**
  * Create
  * Read OR query
@@ -67,7 +68,7 @@ const queryListOfEmployee = () => {
   // All Employee Role
   const sql = "SELECT * FROM users WHERE role = $1";
   try {
-    const employeeList = pool.query(sql, [ROLE[1]]);
+    const employeeList = pool.query(sql, [ROLE[2]]);
     return { Result: employeeList };
   } catch (error) {
     return { Error: error };
@@ -86,6 +87,16 @@ const queryUserById = (id) => {
       // TODO: handle not found (result.rows === 0)
       return { Status: true, Result: result.rows };
     });
+    return { Result: employee };
+  } catch (error) {
+    return { Error: error };
+  }
+};
+
+const queryUserByEmail = (email) => {
+  const sql = "SELECT * FROM users WHERE email = $1";
+  try {
+    const employee = pool.query(sql, [email]);
     return { Result: employee };
   } catch (error) {
     return { Error: error };
@@ -154,6 +165,8 @@ const readSummaryInfos = () => {
       Infos.CountAdmin = result.rows.admin;
     });
 
+    Infos.AdminList = queryListOfUsersByRole(ROLE[1]).Result;
+
     sql = "SELECT count(id) AS employee FROM users WHERE role = $1";
     pool.query(sql, [ROLE[2]], (err, result) => {
       if (err)
@@ -163,6 +176,8 @@ const readSummaryInfos = () => {
         };
       Infos.CountEmployee = result.rows.employee;
     });
+
+    Infos.countDepartment = countDepartment().Result;
 
     return { Status: true, Result: Infos };
   } catch (error) {
@@ -178,6 +193,7 @@ module.exports = {
   queryListOfUsersByRole,
   queryListOfEmployee,
   queryUserById,
+  queryUserByEmail,
   queryUserByName,
   updateUser,
   deleteUserById,

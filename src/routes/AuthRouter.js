@@ -1,44 +1,20 @@
 import express from "express";
-const passport = require("passport");
+// const passport = require("passport"); // Extended TODO: utilize passport package
 const authRouter = express.Router(); // router object
 
 import {
   signupUser,
-  loginUser,
+  loginUserByEmail,
+  loginUserByName,
   logoutUser,
-  checkAuthenticated,
-  checkNotAuthenticated,
-  authenticateToken,
-  postToken,
+  notAuthYet,
 } from "../controllers/AuthHandler.js";
 
-authRouter.post("/signup", signupUser);
-authRouter.post("/login", loginUser);
-authRouter.delete("/logout", logoutUser);
-
-authRouter.post("/token", postToken);
-
-// TODO: getPosts in AuthHandler or move to UserHandler
-const posts = [
-  {
-    username: "Kyle",
-    title: "Post 1",
-  },
-  {
-    username: "Jim",
-    title: "Post 2",
-  },
-];
-const getPosts = (req, res) => {
-  return res.json(posts.filter((post) => post.username === req.user.name));
-};
-authRouter.get("/posts", authenticateToken, getPosts);
-
-// using Passport
-
-// TO DO: without /auth route
-app.get("/", checkAuthenticated, (req, res) => {
-  res.json({ message: "Already authenticated", render: "Go to home page" });
-});
+// TODO: use middleware to check not logged in yet
+// But, handle instead in frontend using react router
+authRouter.post("/signup", notAuthYet, signupUser);
+authRouter.post("/login-name", notAuthYet, loginUserByName);
+authRouter.post("/login-email", notAuthYet, loginUserByEmail);
+authRouter.delete("/logout", notAuthYet, logoutUser);
 
 export { authRouter };

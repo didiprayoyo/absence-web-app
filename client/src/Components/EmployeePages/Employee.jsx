@@ -9,7 +9,7 @@ const Employee = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/employees")
+      .get("http://localhost:3000/user/all-employees")
       .then((result) => {
         if (result.data.Status) {
           setEmployee(result.data.Result);
@@ -23,7 +23,7 @@ const Employee = () => {
 
   const handleDelete = (id) => {
     // TODO: make confirm using toaster + extended modal pop up cards
-    axios.delete(`http://localhost:3000/auth/employee/${id}`).then((result) => {
+    axios.delete(`http://localhost:3000/user/${id}`).then((result) => {
       if (result.data.Status) {
         window.location.reload();
       } else {
@@ -48,8 +48,9 @@ const Employee = () => {
               <th>Name</th>
               <th>Image</th>
               <th>Email</th>
-              <th>Address</th>
-              <th>Salary</th>
+              {/* TODO: joining department to job_role, then to users */}
+              {/* <th>Department</th>
+              <th>Job Role</th> */}
               <th>Action</th>
             </tr>
           </thead>
@@ -66,8 +67,8 @@ const Employee = () => {
                   />
                 </td>
                 <td>{e.email}</td>
-                <td>{e.address}</td>
-                <td>{e.salary}</td>
+                {/* <td>{e.department}</td>
+                <td>{e.job_role}</td> */}
                 <td>
                   <Link
                     to={`/dashboard/edit-employee/${e.id}`}

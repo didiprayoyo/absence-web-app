@@ -1,25 +1,7 @@
-TO DO:
-    create frontend server
-    develop simple SPA for authentication & authorization
-    testing frontend
-    communicate frontend - backend using axios
-    testing backend + debugging
-
-    build CRUD for biodata & picture for all user roles + opsional: log edit biodata & picture (+ table for biodata log)
-    build superadmin feature & CRUD all users (employees) + employees CRUD log (admin only)
-    
-    build attendance page, flow the datetime, and button to in/out office
-    add table for attendance log
-    build by query attendance table by joining on user id
-    build attendace infos (admin only) & detail infos per user
-
-    model the ORMs
-
-    ideas for extended features after finish all above TO-DOS
-    30 extended TODOs
-
 SO, 50 TARGETS IN 25 HOURS, 2 FEATURES PER HOUR
+using feature-based routes MVC, not authorization roles
 
+this endpoint summary is being deprecated for now, bu will be documented using swagger
 endpoints summary:
     GET user/allUsers
     GET user/:userId
@@ -33,7 +15,7 @@ app log endpoints:
 
 packages to be installed:
     eslint, prettier
-    migration: typescript
+    migration: typescript, sequelize/prisma
     wds: express-flash, express-session, method-override, passport, passport-local
     in reactjs env:
         react, react-dom
@@ -57,3 +39,41 @@ packages to be installed:
         validator (for backend)
         jwt, bcrypt
         jest
+
+refactor my TODOs based on priority on my paper
+global TODOs:
+    + REFACTOR frontend with JWToken & headers authorization in component of PrivateRoute
+    + REVIEW & RELEARN express & query, what is params available by them, like: req, res, result, error, etc
+    + TODO prettify all files with config indent: 4 spaces
+    + testing using testing generator extension
+    + complete try catch each controllers for error logs, lihat referensi tiap res.json({ Error })
+        + include morgan logger as added description + regular error from express itself
+    + unite db for admin & user + add role column, then refactor codes related, and definitely unite Admin & Employee Route to User Route
+    + change role-based routes to be feature-based routes (OR page)
+    + skip css & bootstrap, do it after all extended features implemented well
+    + change every alert in every pages with proper error handling OR to proper toaster
+        + also in then.catch, not only log to error, but error logs for frontend
+    + FRONT END TEMPLATE change to MATERIAL UI use CHAT GPT, alloy can do it
+
+
+Old TO DO:
+    check & fix auth router & handler
+    create frontend server
+    develop simple SPA for authentication & authorization
+    testing frontend
+    communicate frontend - backend using axios
+    testing backend + debugging
+
+    build CRUD for bio-data & picture for all user roles + optional: log edit bio-data & picture (+ table for bio-data log)
+    build super-admin feature & CRUD all users (employees) + employees CRUD log (admin only)
+    
+    build attendance page, flow the date-time, and button to in/out office
+    add table for attendance log
+    build by query attendance table by joining on user id
+    build attendance infos (admin only) & detail infos per user
+
+    model the ORMs
+
+    ideas for extended features after finish all above TO-DOS
+    30 extended TODOs
+

@@ -4,23 +4,22 @@ import { useNavigate } from "react-router-dom";
 
 const AddEmployee = () => {
   const [employee, setEmployee] = useState({
-    name: "",
     email: "",
     password: "",
-    salary: "",
-    address: "",
-    category_id: "",
+    name: "",
+    role: 2, // auto employee by admin
     image: "",
+    job_id: 0,
   });
-  const [category, setCategory] = useState([]);
+  const [department, setDepartment] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/category")
+      .get("http://localhost:3000/department/all-departments")
       .then((result) => {
         if (result.data.Status) {
-          setCategory(result.data.Result);
+          setDepartment(result.data.Result);
         } else {
           alert(result.data.Error);
         }
@@ -32,13 +31,13 @@ const AddEmployee = () => {
     e.preventDefault();
     const formData = new FormData();
     // TODO: unhardcode this push method using loop with [indexed-obj], I forget the term :"(, review w3
-    formData.append("name", employee.name);
     formData.append("email", employee.email);
     formData.append("password", employee.password);
-    formData.append("address", employee.address);
-    formData.append("salary", employee.salary);
+    formData.append("name", employee.name);
+    formData.append("role", employee.role);
     formData.append("image", employee.image);
-    formData.append("category_id", employee.category_id);
+    formData.append("job", employee.job);
+    formData.append("job_id", employee.job_id);
     // TODO: save all the backend port to .env for all components and change all the strings
     alert(`${JSON.stringify(Object.fromEntries(formData))}`)
     axios
@@ -59,7 +58,7 @@ const AddEmployee = () => {
       <div className="p-3 rounded w-50 border">
         <h3 className="text-center">Add Employee</h3>
         {/* TODO: unhardcode this label-input and delete disturbing "4" if it's possible */}
-        {/* TODO: refactor salary not per category, like in real cases, but by projects done OR by admin input */}
+        {/* TODO: refactor Salary not per category, like in real cases, but by projects done OR by admin input */}
         <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
             <label for="inputName" className="form-label">
@@ -103,49 +102,35 @@ const AddEmployee = () => {
                 setEmployee({ ...employee, password: e.target.value })
               }
             />
-            <label for="inputSalary" className="form-label">
-              Salary
+            <label for="inputJob" className="form-label">
+              Job
             </label>
             <input
               type="text"
               className="form-control rounded-0"
-              id="inputSalary"
-              placeholder="Enter Salary"
+              id="inputJob"
+              placeholder="Enter Job"
               autoComplete="off"
               onChange={(e) =>
-                setEmployee({ ...employee, salary: e.target.value })
+                setEmployee({ ...employee, job: e.target.value })
               }
             />
           </div>
           <div className="col-12">
-            <label for="inputAddress" className="form-label">
-              Address
+            <label for="department" className="form-label">
+              Department
             </label>
-            <input
-              type="text"
-              className="form-control rounded-0"
-              id="inputAddress"
-              placeholder="1234 Main St"
-              autoComplete="off"
-              onChange={(e) =>
-                setEmployee({ ...employee, address: e.target.value })
-              }
-            />
-          </div>
-          <div className="col-12">
-            <label for="category" className="form-label">
-              Category
-            </label>
+            {/* TODO: add department for employee input */}
             <select
-              name="category"
-              id="category"
+              name="department"
+              id="department"
               className="form-select"
               onChange={(e) =>
-                setEmployee({ ...employee, category_id: e.target.value })
+                setEmployee({ ...employee, department: e.target.value })
               }
             >
-              {category.map((c) => {
-                return <option value={c.id}>{c.name}</option>;
+              {department.map((dep) => {
+                return <option value={dep.id}>{dep.name}</option>;
               })}
             </select>
           </div>

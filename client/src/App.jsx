@@ -1,18 +1,19 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Login from "./Components/Login";
+import Start from "./Components/AuthPages/Start";
+import Register from "./Components/AuthPages/Register";
+import Login from "./Components/AuthPages/Login";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Dashboard from "./Components/Dashboard";
 import Home from "./Components/Home";
-import Employee from "./Components/Employee";
-import Category from "./Components/Category";
+import Employee from "./Components/EmployeePages/Employee";
+import Department from "./Components/DepartmentPages/Department";
 import Profile from "./Components/Profile";
-import AddCategory from "./Components/AddCategory";
-import AddEmployee from "./Components/AddEmployee";
-import EditEmployee from "./Components/EditEmployee";
-import Start from "./Components/Start";
-import EmployeeLogin from "./Components/EmployeeLogin";
-import EmployeeDetail from "./Components/EmployeeDetail";
+import AddDepartment from "./Components/DepartmentPages/AddDepartment";
+import AddEmployee from "./Components/EmployeePages/AddEmployee";
+import EditEmployee from "./Components/EmployeePages/EditEmployee";
+
+import EmployeeDetail from "./Components/EmployeePages/EmployeeDetail";
 import PrivateRoute from "./Components/PrivateRoute";
 
 function App() {
@@ -20,8 +21,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Start />}></Route>
-        <Route path="/admin-login" element={<Login />}></Route>
-        <Route path="/employee-login" element={<EmployeeLogin />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route path="/register" element={<Register />}></Route>
         {/* TODO: Handle Private Route for Employee Login */}
         <Route path="/employee-detail/:id" element={<EmployeeDetail />}></Route>
         <Route
@@ -34,11 +35,11 @@ function App() {
         >
           <Route path="/dashboard" element={<Home />}></Route>
           <Route path="/dashboard/employee" element={<Employee />}></Route>
-          <Route path="/dashboard/category" element={<Category />}></Route>
+          <Route path="/dashboard/department" element={<Department />}></Route>
           <Route path="/dashboard/profile" element={<Profile />}></Route>
           <Route
-            path="/dashboard/add-category"
-            element={<AddCategory />}
+            path="/dashboard/add-department"
+            element={<AddDepartment />}
           ></Route>
           <Route
             path="/dashboard/add-employee"

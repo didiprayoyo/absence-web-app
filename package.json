@@ -1,5 +1,5 @@
 {
-  "name": "simple-ams",
+  "name": "simple-ams-server",
   "version": "1.0.0",
   "description": "simple attendance web app",
   "main": "app.js",

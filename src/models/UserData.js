@@ -4,7 +4,7 @@
 // For user authorization TODO: soft delete CRUD by *admin
 const ROLE = ["superadmin", "admin", "employee"];
 // For attendance status
-const STATUS = ["start", "in", "late", "remote/sick", "out", "no_desc"];
+const STATUS = ["start", "in", "late", "remote/sick", "out", "leave", "no_desc"];
 
 // For App Logs, try using .txt/sheets/csv for different various db
 // const DESC = {

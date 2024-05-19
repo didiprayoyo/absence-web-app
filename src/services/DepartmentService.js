@@ -5,31 +5,47 @@ const createDepartment = (dep) => {
     const sql = `INSERT INTO departments (name) VALUES ($1);`;
     pool.query(sql, [dep], (err, result) => {
       if (err)
-        return res.json({
+        return {
           Status: false,
           Error: `Query error in adding department: ${err}`,
-        });
-      return res.json({ Result: result, Status: true });
+        };
+      return { Result: result, Status: true };
     });
   } catch (error) {
-    return res.json({ Error: error });
+    return { Error: error };
   }
 };
 
-const getAllDepartment = () => {
+const queryListOfDepartments = () => {
   try {
     const sql = "SELECT * FROM departments";
     pool.query(sql, (err, result) => {
       if (err)
-        return res.json({
+        return {
           Status: false,
           Error: "Query in getting all departments",
-        });
-      return res.json({ Result: result, Status: true, Result: result.rows });
+        };
+      return { Status: true, Result: result.rows };
     });
   } catch (error) {
-    return res.json({ Error: error });
+    return { Error: error };
   }
 };
 
-module.exports = { createDepartment, getAllDepartment };
+const countDepartment = () => {
+  try {
+    const sql = "SELECT count(id) AS dep FROM departments";
+    pool.query(sql, (err, result) => {
+      if (err)
+        return {
+          Status: false,
+          Error: "Query in counting departments",
+        };
+      return { Status: true, Result: result.rows };
+    });
+  } catch (error) {
+    return { Error: error };
+  }
+}
+
+module.exports = { createDepartment, queryListOfDepartments, countDepartment };

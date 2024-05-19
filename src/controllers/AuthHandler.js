@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt"); // be careful of decryption, 10 is the salt
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const { createUser, queryUserByName } = require("../services/UserService.js");
+const { createUser, queryUserByName, queryUserByEmail } = require("../services/UserService.js");
 
 // TODO: but access token from client header, decoded global user here
 const setUser = (req, res, next) => {
@@ -12,30 +12,67 @@ const setUser = (req, res, next) => {
   next();
 };
 
+// TODO: copy from UserController
 const signupUser = async (req, res) => {
-  try {
-    // TO DO: synchronize user model, use body in axios
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    id += 1;
-    const user = {
-      id,
-      name: req.body.name,
-      password: hashedPassword,
-      role: "user",
-    };
+  bcrypt.hash(req.body.password, 10, (err, hash) => {
+    console.log(err);
+    if (err)
+      return res.json({
+        Status: false,
+        Error: `Query error in adding user: ${err}`,
+      });
 
-    createUser(user);
-    res.status(201).json({ message: "Success register the user" }); // go to login page
+    const values = {
+      email: req.body.email,
+      password: hash,
+      name: req.body.name,
+      role: req.body.role,
+      // TODO: handle this image
+      // req.file.filename,
+      image: req.body.image,
+      job_id: req.body.job_id,
+    };
+    const result = createUser(values);
+  
+    return res.json(result);
+  });
+};
+
+const loginUserByEmail = async (req, res) => {
+  // TODO: login by name or email
+  const user = await queryUserByEmail(req.body.email);
+  if (user == null) {
+    return res
+      .status(400)
+      .json({ Error: `Cannot find user with that email, ${req.body.email} not registered` });
+  }
+
+  try {
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      // FIXME: Be careful this query result, look at UserService
+      const accessToken = generateAccessToken(user);
+      //   const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+      //   refreshTokens.push(refreshToken);
+      res.cookie("token", accessToken);
+      res.json({
+        AccessToken: accessToken,
+        // refreshToken: refreshToken,
+        Result: "Success login",
+      }); // go to home page
+    } else {
+      res.json({ Error: "Wrong password" }); // still in login
+    }
   } catch (error) {
-    res.status(500).json({ message: error }); // go to signup page
+    res.status(500).json({ Error: error }); // still in login
   }
 };
 
+// TODO: learn refreshToken for login and logout only
 // let refreshTokens = [];
 const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" }); // OR "1d"
 };
-const loginUser = async (req, res) => {
+const loginUserByName = async (req, res) => {
   // TODO: login by name or email
   const user = await queryUserByName(req.body.name);
   if (user == null) {
@@ -60,19 +97,21 @@ const loginUser = async (req, res) => {
       res.json({ Error: "Wrong password" }); // still in login
     }
   } catch (error) {
-    res.status(500).json({ message: error }); // still in login
+    res.status(500).json({ Error: error }); // still in login
   }
 };
 
 const logoutUser = (req, res) => {
-  refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
+  // TODO: extended learn refreshToken
+  // refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
   res.clearCookie("token");
   req.logOut();
   res
     .status(204)
-    .json({ message: "Success logout", render: "Go to login page" });
+    .json({ Result: "Success logout", Status: "Go to login page" });
 };
 
+// TODO: learn more time, using refresh token here
 const postToken = (req, res) => {
   const refreshToken = req.body.token;
   if (refreshToken == null) return res.sendStatus(401);
@@ -85,25 +124,11 @@ const postToken = (req, res) => {
 };
 
 // MIDDLEWARE
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (token == null) return res.sendStatus(401);
-
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    console.log(err);
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-};
-
-// Add authorization
+// Add authorization, important for each handlers
 const authUser = (req, res, next) => {
   // TODO: get user data by decoding token, save all user data in token
   if (req.user == null) {
-    res.status(403);
-    return res.send("You need to sign in");
+    return res.status(403).send("You need to sign in");
   }
   next();
 };
@@ -121,6 +146,7 @@ const authRole = (roles) => {
 };
 
 const authId = (roles) => {
+  // TODO: get user data by decoding token, save all user data in token
   return (req, res, next) => {
     roles.forEach((role) => {
       if (req.user.role === role) {
@@ -134,6 +160,15 @@ const authId = (roles) => {
   };
 };
 
+const notAuthYet = (req, res, next) => {
+  // TODO: get user data by decoding token, save all user data in token
+  if (req.user == null) {
+    next();
+  }
+  return res.status(403).send("You need to logout");
+};
+
+// Using Cookies Storage to take the token
 const verifyUser = (req, res, next) => {
   const token = req.cookies.token;
   if (token) {
@@ -149,15 +184,31 @@ const verifyUser = (req, res, next) => {
   }
 };
 
+// Using Local Storage of headers["authorization"] to take the token
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    console.log(err);
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+
 export {
   setUser,
   signupUser,
-  loginUser,
+  loginUserByEmail,
+  loginUserByName,
   logoutUser,
-  authenticateToken,
   postToken,
   authUser,
   authRole,
   authId,
+  notAuthYet,
   verifyUser,
+  authenticateToken,
 };

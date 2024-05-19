@@ -1,5 +1,6 @@
 // IN AUTH ROUTER
 
+// using Passport
 // handle this page in frontend Routes
 // app.get('/login', checkNotAuthenticated, (req, res) => {
 //     res.render('login.ejs')

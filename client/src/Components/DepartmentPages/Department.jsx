@@ -2,16 +2,16 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const Category = () => {
-  const [category, setCategory] = useState([]);
+const Department = () => {
+  const [department, setDepartment] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/category")
+      .get("http://localhost:3000/department/all-departments")
       .then((result) => {
         if (result.data.Status) {
-          setCategory(result.data.Result);
-          // alert(`${JSON.stringify(result.data.Result)} ${category}`)
+          setDepartment(result.data.Result);
+          // alert(`${JSON.stringify(result.data.Result)} ${department}`)
         } else {
           // TODO: refactor to toaster
           alert(result.data.Error);
@@ -23,10 +23,10 @@ const Category = () => {
   return (
     <div className="px-5 mt-3">
       <div className="d-flex justify-content-center">
-        <h3>Category List (TODO: change this design & implement to Department & Job Roles)</h3>
+        <h3>Department List (TODO: change this design & implement to Department & Job Roles)</h3>
       </div>
-      <Link to="/dashboard/add-category" className="btn btn-success">
-        Add Category
+      <Link to="/dashboard/add-department" className="btn btn-success">
+        Add Department
       </Link>
       <div className="mt-3">
         <table className="table">
@@ -36,10 +36,10 @@ const Category = () => {
             </tr>
           </thead>
           <tbody>
-            {category.map((c, index) => (
+            {department.map((dep, index) => (
               // TODO: using index instead of id, safer
               <tr key={index}>
-                <td>{c.name}</td>
+                <td>{dep.name}</td>
               </tr>
             ))}
           </tbody>
@@ -49,4 +49,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default Department;

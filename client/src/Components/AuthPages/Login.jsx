@@ -3,7 +3,7 @@ import "./style.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const EmployeeLogin = () => {
+const Login = () => {
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -14,26 +14,24 @@ const EmployeeLogin = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert(`${JSON.stringify(values)}`);
     axios
-      .post("http://localhost:3000/employee/employee-login", values)
+      .post("http://localhost:3000/auth/login", values)
       .then((result) => {
         if (result.data.loginStatus) {
           localStorage.setItem("valid", true);
-          navigate(`/employee-detail/${result.data.id}`);
+          navigate("/dashboard");
         } else {
           setError(result.data.Error);
         }
       }) // TODO: refactor frontend error logs
       .catch((err) => {
-        alert(`${err}`);
+        alert(`error: ${err}`);
       });
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 loginPage">
       <div className="p-3 rounded w-25 border loginForm">
-        {/* FIXME: it is safe to use error && error */}
         <div className="text-warning">{error && error}</div>
         <h2>Login Page</h2>
         <form onSubmit={handleSubmit}>
@@ -64,12 +62,12 @@ const EmployeeLogin = () => {
               className="form-control rounded-0"
             />
           </div>
-          <button className="btn btn-success w-100 rounded-0 mb-2">
+          <button type="submit" className="btn btn-success w-100 rounded-0 mb-2">
             Log in
           </button>
-          {/* TODO: it's just decoration, delete if it's not used */}
           <div className="mb-1">
-            <input type="checkbox" name="tick" id="tick" className="me-2" />
+            <input type="checkbox" name="agreement" id="tick" className="me-2" />
+            {/* TODO: it's just decoration, delete if it's not used */}
             <label htmlFor="password">
               You are Agree with terms & conditions
             </label>
@@ -80,4 +78,4 @@ const EmployeeLogin = () => {
   );
 };
 
-export default EmployeeLogin;
+export default Login;
