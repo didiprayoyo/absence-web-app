@@ -15,6 +15,7 @@ const Home = () => {
 
   const getSummaryInfos = () => {
     axios.get("http://localhost:3000/user/admin-dashboard").then((result) => {
+      console.log(result.data);
       if (result.data.Status) {
         setSummaryInfos(result.data.Result);
       } else {
@@ -54,7 +55,7 @@ const Home = () => {
           <hr />
           <div className="d-flex justify-content-between">
             <h5>Total:</h5>
-            <h5>${summaryInfos.countDepartment}</h5>
+            <h5>{summaryInfos.countDepartment}</h5>
           </div>
         </div>
       </div>
@@ -68,7 +69,7 @@ const Home = () => {
             </tr>
           </thead>
           <tbody>
-            {adminList.map((admin, index) => (
+            {summaryInfos.adminList.map((admin, index) => (
               // TODO: using index instead of id, safer
               <tr key={index}>
                 <td>{admin.email}</td>

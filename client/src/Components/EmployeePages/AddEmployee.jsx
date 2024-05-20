@@ -12,14 +12,28 @@ const AddEmployee = () => {
     job_id: 0,
   });
   const [department, setDepartment] = useState([]);
+  const [job, setJob] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    axios
+      .get("http://localhost:3000/department/all-jobs")
+      .then((result) => {
+        if (result.data.Status) {
+          setJob(result.data.Result);
+          console.log(job, result.data.Result);
+        } else {
+          alert(result.data.Error);
+        }
+      }) // TODO: refactor frontend error logs
+      .catch((err) => console.log(err));
+
     axios
       .get("http://localhost:3000/department/all-departments")
       .then((result) => {
         if (result.data.Status) {
           setDepartment(result.data.Result);
+          console.log(department, result.data.Result);
         } else {
           alert(result.data.Error);
         }
@@ -36,12 +50,12 @@ const AddEmployee = () => {
     formData.append("name", employee.name);
     formData.append("role", employee.role);
     formData.append("image", employee.image);
-    formData.append("job", employee.job);
+    // formData.append("job", employee.job);
     formData.append("job_id", employee.job_id);
     // TODO: save all the backend port to .env for all components and change all the strings
-    alert(`${JSON.stringify(Object.fromEntries(formData))}`)
+    alert(`${JSON.stringify(Object.fromEntries(formData))}`);
     axios
-      .post("http://localhost:3000/auth/employee", Object.fromEntries(formData))
+      .post("http://localhost:3000/user", Object.fromEntries(formData))
       .then((result) => {
         if (result.data.Status) {
           navigate("/dashboard/employee");
@@ -61,7 +75,7 @@ const AddEmployee = () => {
         {/* TODO: refactor Salary not per category, like in real cases, but by projects done OR by admin input */}
         <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
-            <label for="inputName" className="form-label">
+            <label htmlFor="inputName" className="form-label">
               Name
             </label>
             <input
@@ -75,7 +89,7 @@ const AddEmployee = () => {
             />
           </div>
           <div className="col-12">
-            <label for="inputEmail4" className="form-label">
+            <label htmlFor="inputEmail4" className="form-label">
               Email
             </label>
             <input
@@ -90,7 +104,7 @@ const AddEmployee = () => {
             />
           </div>
           <div className="col-12">
-            <label for="inputPassword4" className="form-label">
+            <label htmlFor="inputPassword4" className="form-label">
               Password
             </label>
             <input
@@ -102,23 +116,10 @@ const AddEmployee = () => {
                 setEmployee({ ...employee, password: e.target.value })
               }
             />
-            <label for="inputJob" className="form-label">
-              Job
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0"
-              id="inputJob"
-              placeholder="Enter Job"
-              autoComplete="off"
-              onChange={(e) =>
-                setEmployee({ ...employee, job: e.target.value })
-              }
-            />
           </div>
           <div className="col-12">
-            <label for="department" className="form-label">
-              Department
+            <label htmlFor="department" className="form-label">
+              Job Role
             </label>
             {/* TODO: add department for employee input */}
             <select
@@ -126,16 +127,16 @@ const AddEmployee = () => {
               id="department"
               className="form-select"
               onChange={(e) =>
-                setEmployee({ ...employee, department: e.target.value })
+                setEmployee({ ...employee, job_id: e.target.value })
               }
             >
-              {department.map((dep) => {
-                return <option value={dep.id}>{dep.name}</option>;
+              {job.map((j) => {
+                return <option value={j.id}>{j.job}</option>;
               })}
             </select>
           </div>
           <div className="col-12 mb-3">
-            <label className="form-label" for="inputGroupFile01">
+            <label className="form-label" htmlFor="inputGroupFile01">
               Select Image
             </label>
             <input

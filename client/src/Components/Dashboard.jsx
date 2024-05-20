@@ -9,7 +9,8 @@ const Dashboard = () => {
   // NOTE: so that cors have credential to connect with backend
   axios.defaults.withCredentials = true;
   const handleLogout = () => {
-    axios.get("http://localhost:3000/auth/logout").then((result) => {
+    axios.delete("http://localhost:3000/auth/logout").then((result) => {
+      console.log(result);
       if (result.data.Status) {
         localStorage.removeItem("valid");
         navigate("/");

@@ -35,7 +35,7 @@ app.use(express.static("public"));
 app.use(morgan("dev"));
 
 // Add authorization, store decoded user token in req.user
-app.use(setUser());
+// app.use(setUser());
 
 // URL handling
 app.use("/auth", authRouter);

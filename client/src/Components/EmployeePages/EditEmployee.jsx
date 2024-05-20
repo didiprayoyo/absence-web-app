@@ -7,19 +7,17 @@ const EditEmployee = () => {
   const [employee, setEmployee] = useState({
     email: "",
     name: "",
-    department: "",
-    job: "",
     job_id: 0,
   });
-  const [department, setDepartment] = useState([]);
+  const [job, setJob] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/department/all-departments")
+      .get("http://localhost:3000/department/all-jobs")
       .then((result) => {
         if (result.data.Status) {
-          setDepartment(result.data.Result);
+          setJob(result.data.Result);
         } else {
           alert(result.data.Error);
         }
@@ -27,15 +25,13 @@ const EditEmployee = () => {
       .catch((err) => console.log(err));
 
     axios
-      .get(`http://localhost:3000/auth/employee/${id}`)
+      .get(`http://localhost:3000/user/${id}`)
       .then((result) => {
         setEmployee({
           ...employee,
-          name: result.data.Result[0].name,
-          email: result.data.Result[0].email,
-          job: result.data.Result[0].job,
-          department: result.data.Result[0].department,
-          job_id: result.data.Result[0].job_id,
+          name: result.data.Result.name,
+          email: result.data.Result.email,
+          job_id: result.data.Result.job_id,
         });
       })
       .catch((err) => console.log(err));
@@ -46,6 +42,7 @@ const EditEmployee = () => {
     axios
       .put(`http://localhost:3000/user/${id}`, employee)
       .then((result) => {
+        console.log(result.data);
         if (result.data.Status) {
           navigate("/dashboard/employee");
         } else {
@@ -61,7 +58,7 @@ const EditEmployee = () => {
         <h3 className="text-center">Edit Employee</h3>
         <form className="row g-1" onSubmit={handleSubmit}>
           <div className="col-12">
-            <label for="inputName" className="form-label">
+            <label htmlFor="inputName" className="form-label">
               Name
             </label>
             <input
@@ -69,14 +66,14 @@ const EditEmployee = () => {
               className="form-control rounded-0"
               id="inputName"
               placeholder="Enter Name"
-              value={employee.name}
+              defaultValue={employee.name}
               onChange={(e) =>
                 setEmployee({ ...employee, name: e.target.value })
               }
             />
           </div>
           <div className="col-12">
-            <label for="inputEmail4" className="form-label">
+            <label htmlFor="inputEmail4" className="form-label">
               Email
             </label>
             <input
@@ -85,42 +82,30 @@ const EditEmployee = () => {
               id="inputEmail4"
               placeholder="Enter Email"
               autoComplete="off"
-              value={employee.email}
+              defaultValue={employee.email}
               onChange={(e) =>
                 setEmployee({ ...employee, email: e.target.value })
               }
             />
           </div>
           <div className="col-12">
-            <label for="inputJob" className="form-label">
-              Job
-            </label>
-            <input
-              type="text"
-              className="form-control rounded-0"
-              id="inputJob"
-              placeholder="1234 Main St"
-              autoComplete="off"
-              value={employee.job}
-              onChange={(e) =>
-                setEmployee({ ...employee, job: e.target.value })
-              }
-            />
-          </div>
-          <div className="col-12">
-            <label for="department" className="form-label">
-              Department
+            <label htmlFor="job" className="form-label">
+              Job Role
             </label>
             <select
-              name="department"
-              id="department"
+              name="job"
+              id="job"
               className="form-select"
               onChange={(e) =>
-                setEmployee({ ...employee, department: e.target.value })
+                setEmployee({ ...employee, job_id: e.target.value })
               }
             >
-              {department.map((dep) => {
-                return <option value={dep.id}>{dep.name}</option>;
+              {job.map((j) => {
+                return (
+                  <option value={j.id} selected={j.id === employee.job_id}>
+                    {j.job}
+                  </option>
+                );
               })}
             </select>
           </div>

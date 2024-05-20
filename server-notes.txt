@@ -39,9 +39,11 @@ packages to be installed:
         validator (for backend)
         jwt, bcrypt
         jest
+        multer, path
 
 refactor my TODOs based on priority on my paper
 global TODOs:
+    + adjust all response status code as rules & best practice
     + REFACTOR frontend with JWToken & headers authorization in component of PrivateRoute
     + REVIEW & RELEARN express & query, what is params available by them, like: req, res, result, error, etc
     + TODO prettify all files with config indent: 4 spaces

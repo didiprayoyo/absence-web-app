@@ -24,18 +24,20 @@ const getAllAdmins = (req, res) => {
   const adminList = queryListOfUsersByRole(ROLE[1]);
 
   return res.json(adminList);
-}
+};
 
-const getAllEmployees = (req, res) => {
-  const employeeList = queryListOfEmployee();
+const getAllEmployees = async (req, res) => {
+  const employeeList = await queryListOfEmployee();
 
+  console.log(employeeList);
   return res.json(employeeList);
-}
+};
 
-const getUser = (req, res) => {
+const getUser = async (req, res) => {
   const userId = req.params.id; // passing param from axios.get
-  const userData = queryUserById(userId);
+  const userData = await queryUserById(userId);
 
+  console.log(userData);
   return res.json(userData);
 };
 
@@ -58,18 +60,12 @@ const upload = multer({
 // end image upload
 // TODO: handle upload
 // router.post("/employee", upload.single("image"), (req, res) => {
-const registerUser = (req, res) => {
-  bcrypt.hash(req.body.password, 10, (err, hash) => {
-    console.log(err);
-    if (err)
-      return res.json({
-        Status: false,
-        Error: `Query error in adding employee by admin: ${err}`,
-      });
-
+const registerUser = async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const values = {
       email: req.body.email,
-      password: hash,
+      password: hashedPassword,
       name: req.body.name,
       role: req.body.role,
       // TODO: handle this image
@@ -77,38 +73,53 @@ const registerUser = (req, res) => {
       image: req.body.image,
       job_id: req.body.job_id,
     };
-    const result = createUser(values);
-  
-    return res.json(result);
-  });
-}
+    const result = await createUser(values);
 
-const editUser = (req, res) => {
+    return res.json(result);
+  } catch (error) {
+    return res.json({
+      Status: false,
+      Error: `Query error in adding employee by admin: ${error}`,
+    });
+  }
+};
+
+const editUser = async (req, res) => {
   const userId = req.params.id;
   const values = {
     email: req.body.email,
-    password: req.body.password,
+    // password: req.body.password,
     name: req.body.name,
-    role: req.body.role,
-    image: req.body.image,
+    // role: req.body.role,
+    // image: req.body.image,
     job_id: req.body.job_id,
   };
-  const result = updateUser(userId, values);
+  const result = await updateUser(userId, values);
 
   return res.json(result);
-}
+};
 
-const deleteUser = (req, res) => {
+const deleteUser = async (req, res) => {
   const userId = req.params.id;
-  const result = deleteUserById(userId);
+  const result = await deleteUserById(userId);
 
+  console.log(result);
   return res.json(result);
-}
+};
 
-const getUserSummary = (req, res) => {
-  const summary = readSummaryInfos();
-
+const getSummaryOfUsers = async (req, res) => {
+  const summary = await readSummaryInfos();
+  
   return res.json(summary);
-}
+};
 
-module.exports = { getAllUsers, getAllAdmins, getAllEmployees, getUser, registerUser, editUser, deleteUser, getUserSummary };
+module.exports = {
+  getAllUsers,
+  getAllAdmins,
+  getAllEmployees,
+  getUser,
+  registerUser,
+  editUser,
+  deleteUser,
+  getSummaryOfUsers,
+};

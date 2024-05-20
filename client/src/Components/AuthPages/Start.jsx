@@ -8,13 +8,14 @@ const Start = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/verify")
+      .get("http://localhost:3000/auth/verify")
       .then((result) => {
+        console.log(result.data);
         if (result.data.Status) {
           if (result.data.role === "admin") {
             navigate("/dashboard");
           } else {
-            navigate("/employee-detail/" + result.data.id);
+            navigate(`/employee-detail/${result.data.id}`);
           }
         }
       }) // TODO: refactor frontend error logs

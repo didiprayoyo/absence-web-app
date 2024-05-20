@@ -13,6 +13,7 @@ const Employee = () => {
       .then((result) => {
         if (result.data.Status) {
           setEmployee(result.data.Result);
+          // console.log(employee);
           // alert(`${JSON.stringify(result.data.Result)}`)
         } else {
           alert(result.data.Error);

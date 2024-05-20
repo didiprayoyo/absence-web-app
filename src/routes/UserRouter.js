@@ -8,43 +8,48 @@ const {
   registerUser,
   editUser,
   deleteUser,
-  getUserSummary,
+  getSummaryOfUsers,
 } = require("../controllers/UserHandler.js");
 // import middleware
-const { authUser, authRole } = require("../controllers/AuthHandler.js");
+const { authUser, authRole, authId, decodedToken } = require("../controllers/AuthHandler.js");
 
 const userRouter = express.Router(); // router object
 
 // [ ]: Test API only
 // ROLE[1] is admin, ROLE[2] is super admin
 userRouter.get(
-  "/all-users",
+  "/admin-dashboard",
+  decodedToken,
   authUser,
-  authRole([ROLE[1], ROLE[2]]),
+  authId([ROLE[1], ROLE[0]]),
+  getSummaryOfUsers
+);
+userRouter.get(
+  "/all-users",
+  decodedToken,
+  authUser,
+  authRole([ROLE[1], ROLE[0]]),
   getAllUsers
 );
 userRouter.get(
   "/all-admins",
+  decodedToken,
   authUser,
-  authRole([ROLE[1], ROLE[2]]),
+  authRole([ROLE[1], ROLE[0]]),
   getAllAdmins
 );
 userRouter.get(
   "/all-employees",
+  decodedToken,
   authUser,
-  authRole([ROLE[1], ROLE[2]]),
+  authRole([ROLE[1], ROLE[0]]),
   getAllEmployees
 );
-userRouter.get("/:id", authUser, authId([ROLE[1], ROLE[2]]), getUser);
-userRouter.post("", authUser, authRole([ROLE[1], ROLE[2]]), registerUser);
-userRouter.put("/:id", authUser, authId([ROLE[1], ROLE[2]]), editUser);
-userRouter.delete("/:id", authUser, authId([ROLE[1], ROLE[2]]), deleteUser);
+userRouter.get("/:id", decodedToken, authUser, authId([ROLE[1], ROLE[0]]), getUser);
+userRouter.post("", decodedToken, authUser, authRole([ROLE[1], ROLE[0]]), registerUser);
+userRouter.put("/:id", decodedToken, authUser, authId([ROLE[1], ROLE[0]]), editUser);
+userRouter.delete("/:id", decodedToken, authUser, authId([ROLE[1], ROLE[0]]), deleteUser);
 
-userRouter.get(
-  "/admin-dashboard",
-  authUser,
-  authId([ROLE[1], ROLE[2]]),
-  getUserSummary
-);
+
 
 module.exports = { userRouter };

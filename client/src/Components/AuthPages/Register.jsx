@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./style.css";
+import "../style.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -16,19 +16,24 @@ const EmployeeLogin = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert(`${JSON.stringify(values)}`);
+    console.log(values);
     axios
       .post("http://localhost:3000/auth/signup", values)
       .then((result) => {
-        if (result.data.loginStatus) {
+        console.log(result);
+        if (result.data.Status) {
           localStorage.setItem("valid", true);
-          navigate(`/employee-detail/${result.data.id}`);
+          navigate("/login", {
+            state: {
+              registeredDescription: "You have been registered as Admin",
+            },
+          });
         } else {
           setError(result.data.Error);
         }
       }) // TODO: refactor frontend error logs
       .catch((err) => {
-        alert(`${err}`);
+        console.log(`Error: ${err}`);
       });
   };
 
@@ -50,6 +55,7 @@ const EmployeeLogin = () => {
               placeholder="Enter Email"
               onChange={(e) => setValues({ ...values, email: e.target.value })}
               className="form-control rounded-0"
+              required
             />
           </div>
           <div className="mb-3">
@@ -64,33 +70,50 @@ const EmployeeLogin = () => {
                 setValues({ ...values, password: e.target.value })
               }
               className="form-control rounded-0"
+              required
             />
           </div>
           <div className="mb-3">
             <label htmlFor="name">
-              <strong>name:</strong>
+              <strong>Name:</strong>
             </label>
             <input
               type="text"
               name="name"
               placeholder="Enter Name"
-              onChange={(e) =>
-                setValues({ ...values, name: e.target.value })
-              }
+              onChange={(e) => setValues({ ...values, name: e.target.value })}
               className="form-control rounded-0"
+              required
             />
           </div>
-          <button type="submit" className="btn btn-success w-100 rounded-0 mb-2">
+          <button
+            type="submit"
+            className="btn btn-success w-100 rounded-0 mb-2"
+          >
             Register
           </button>
           {/* TODO: it's just decoration, delete if it's not used */}
           <div className="mb-1">
-            <input type="checkbox" name="agreement" id="tick" className="me-2" />
+            <input
+              type="checkbox"
+              name="agreement"
+              id="tick"
+              className="me-2"
+            />
             <label htmlFor="password">
               You are Agree with terms & conditions
             </label>
           </div>
         </form>
+        <button
+            type="button"
+            className="btn btn-success"
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
+            Login
+          </button>
       </div>
     </div>
   );
