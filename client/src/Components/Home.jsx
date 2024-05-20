@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [summaryInfos, setSummaryInfos] = useState({
@@ -13,6 +14,18 @@ const Home = () => {
     getSummaryInfos();
   }, []);
 
+  const handleDelete = (id) => {
+    // TODO: make confirm using toaster + extended modal pop up cards
+    axios.delete(`http://localhost:3000/user/${id}`).then((result) => {
+      if (result.data.Status) {
+        window.location.reload();
+      } else {
+        // TODO: refactor all alert error handle based on our global todos
+        alert(result.data.Error);
+      }
+    }); // FIXME: is it okay without catch?
+  };
+
   const getSummaryInfos = () => {
     axios.get("http://localhost:3000/user/admin-dashboard").then((result) => {
       console.log(result.data);
@@ -23,7 +36,7 @@ const Home = () => {
         alert(result.data.Error);
       }
     });
-  }
+  };
 
   return (
     <div>
@@ -59,30 +72,42 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="mt-4 px-5 pt-3">
-        <h3>List of Admins</h3>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {summaryInfos.adminList.map((admin, index) => (
-              // TODO: using index instead of id, safer
-              <tr key={index}>
-                <td>{admin.email}</td>
-                {/* TODO: this actions only for super admin */}
-                <td>
-                  <button className="btn btn-info btn-sm me-2">Edit</button>
-                  <button className="btn btn-warning btn-sm">Delete</button>
-                </td>
+      {localStorage.getItem("role") == "superadmin" && (
+        <div className="mt-4 px-5 pt-3">
+          <h3>List of Admins</h3>
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {summaryInfos.adminList.map((admin, index) => (
+                // TODO: using index instead of id, safer
+                <tr key={index}>
+                  <td>{admin.email}</td>
+                  {/* TODO: this actions only for super admin */}
+                  <td>
+                    <Link
+                      to={`/dashboard/edit-employee/${admin.id}`}
+                      className="btn btn-info btn-sm me-2"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      className="btn btn-warning btn-sm"
+                      onClick={() => handleDelete(admin.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

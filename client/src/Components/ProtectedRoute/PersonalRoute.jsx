@@ -1,0 +1,1 @@
+// TODO: use verify to get id of user (by decode token), and is it same as params.id?

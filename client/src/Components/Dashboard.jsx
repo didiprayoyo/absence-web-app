@@ -12,7 +12,8 @@ const Dashboard = () => {
     axios.delete("http://localhost:3000/auth/logout").then((result) => {
       console.log(result);
       if (result.data.Status) {
-        localStorage.removeItem("valid");
+        localStorage.removeItem("role");
+        localStorage.removeItem("token");
         navigate("/");
       }
     });

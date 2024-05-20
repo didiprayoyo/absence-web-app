@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../style.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,23 @@ const EmployeeLogin = () => {
   const navigate = useNavigate();
   axios.defaults.withCredentials = true;
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/auth/verify")
+      .then((result) => {
+        console.log(result.data);
+        if (result.data.Status) {
+          localStorage.setItem("role", result.data.role);
+          if (result.data.role === "admin") {
+            navigate("/dashboard");
+          } else {
+            navigate(`/employee-detail/${result.data.id}`);
+          }
+        }
+      }) // TODO: refactor frontend error logs
+      .catch((err) => console.log(err));
+  }, []);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(values);
@@ -22,7 +39,6 @@ const EmployeeLogin = () => {
       .then((result) => {
         console.log(result);
         if (result.data.Status) {
-          localStorage.setItem("valid", true);
           navigate("/login", {
             state: {
               registeredDescription: "You have been registered as Admin",

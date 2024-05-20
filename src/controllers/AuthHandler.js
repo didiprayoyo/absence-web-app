@@ -66,6 +66,7 @@ const loginUserByEmail = async (req, res) => {
       return res.json({
         Status: true,
         AccessToken: accessToken,
+        Role: ROLE[user.role],
         // refreshToken: refreshToken,
         Result: "Success login",
       }); // go to home page
@@ -210,6 +211,7 @@ const verifyUser = (req, res, next) => {
       req.user = decoded;
       return res.json({
         Status: true,
+        token: req.cookies.token,
         role: ROLE[req.user.role],
         id: req.user.id,
       });

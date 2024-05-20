@@ -12,6 +12,7 @@ const Start = () => {
       .then((result) => {
         console.log(result.data);
         if (result.data.Status) {
+          localStorage.setItem("role", result.data.role);
           if (result.data.role === "admin") {
             navigate("/dashboard");
           } else {

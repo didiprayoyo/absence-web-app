@@ -25,5 +25,7 @@ authRouter.get("/verify", verifyUser);
 
 // Testing middleware in my browser
 authRouter.get("/token", decodedToken, authUser); // use debugging mode in func decodedToken
+// Testing in postman
+authRouter.get("/create-super-admin", signupUser);
 
 module.exports = { authRouter };

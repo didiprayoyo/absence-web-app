@@ -44,7 +44,8 @@ const EditEmployee = () => {
       .then((result) => {
         console.log(result.data);
         if (result.data.Status) {
-          navigate("/dashboard/employee");
+          navigate(-1);
+          // navigate("/dashboard/employee");
         } else {
           alert(result.data.Error);
         }

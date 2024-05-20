@@ -9,10 +9,10 @@ const EmployeeDetail = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/employee/detail/${id}`)
+      .get(`http://localhost:3000/user/${id}`)
       .then((result) => {
         // TODO: understand how do they work each other & the structures of their req-res in backend & frontend?
-        // alert(`${JSON.stringify(result.data.Result)}`)
+        console.log(result.data.Result[0]);
         setEmployee(result.data.Result[0]);
       }) // TODO: refactor frontend error logs
       .catch((err) => console.log(err));
@@ -20,7 +20,7 @@ const EmployeeDetail = () => {
 
   const handleLogout = () => {
     axios
-      .get("http://localhost:3000/employee/logout")
+      .get("http://localhost:3000/auth/logout")
       .then((result) => {
         if (result.data.Status) {
           localStorage.removeItem("valid");
